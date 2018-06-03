@@ -58,7 +58,7 @@ public class MovieResource {
     @GET
     @Timed
     public Response getMoviesByParams(@QueryParam("title") String title, @QueryParam("runtimeInMinutes") int runtimeInMinutes,
-            @QueryParam("metascore") int metascore, @QueryParam("imdbRating") BigDecimal imdbRating, @QueryParam("imdbVotes") long imdbVotes ) {
+            @QueryParam("metascore") int metascore, @QueryParam("imdbRating") BigDecimal imdbRating, @QueryParam("imdbVotes") long imdbVotes) {
         List<Movie> movies = movieBusiness.getMoviesByParams(title, runtimeInMinutes, metascore, imdbRating, imdbVotes);
         return Response.status(Status.OK).entity(movies).build();
     }
