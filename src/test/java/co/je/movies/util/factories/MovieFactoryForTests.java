@@ -24,6 +24,24 @@ public class MovieFactoryForTests {
 
         return new Movie(imdbId, title, runtimeInMinutes, releaseDate, filmRating, genre, director, plot, metascore, imdbRating, imdbVotes);
     }
+
+    public static Movie getMatrixReloadedMovie() {
+
+        String imdbId = "tt0234215";
+        String title = "The Matrix Reloaded";
+        int runtimeInMinutes = 138;
+        LocalDateTime releaseDate = LocalDateTime.of(2003, 05, 15, 00, 00);
+        FilmRating filmRating = FilmRating.R;
+        String genre = "Action, Sci-Fi";
+        String director = "The Wachowski brothers";
+        String plot = "Neo and the rebel leaders estimate that they have 72 hours until 250,000 probes discover Zion and " +
+                "destroy it and its inhabitants. During this, Neo must decide how he can save Trinity from a dark fate in his dreams.";
+        int metascore = 62;
+        BigDecimal imdbRating = new BigDecimal("7.2");
+        long imdbVotes = 458720;
+
+        return new Movie(imdbId, title, runtimeInMinutes, releaseDate, filmRating, genre, director, plot, metascore, imdbRating, imdbVotes);
+    }
     
     public static Movie getNotValidMovie() {
 
