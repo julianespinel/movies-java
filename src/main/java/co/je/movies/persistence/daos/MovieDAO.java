@@ -83,12 +83,11 @@ public class MovieDAO {
     public List<Movie> getMoviesByParams(Connection dbConnection, String title, int runtimeInMinutes, int metascore,
             BigDecimal imdbRating, long imdbVotes) throws SQLException {
 
-        List<Movie> movies = new ArrayList<Movie>();
-        String getMoviesByParamsSQL = "SELECT * FROM movies WHERE title LIKE ? AND runtimeInMinutes >= ? AND metascore >= ? AND imdbRating >= ? AND imdbVotes >= ?;";
+        String getMoviesByParamsSQL = "SELECT * FROM movies WHERE lower(title) LIKE ? AND runtimeInMinutes >= ? AND metascore >= ? AND imdbRating >= ? AND imdbVotes >= ?;";
 
         PreparedStatement prepareStatement = dbConnection.prepareStatement(getMoviesByParamsSQL);
         
-        String titleQuery = StringUtils.isBlank(title) ? "%" : "%" + title + "%";
+        String titleQuery = StringUtils.isBlank(title) ? "%" : "%" + title.toLowerCase() + "%";
         prepareStatement.setString(1, titleQuery);
         
         prepareStatement.setInt(2, runtimeInMinutes);
@@ -102,7 +101,7 @@ public class MovieDAO {
         LOGGER.info("getMoviesByParams: " + prepareStatement);
 
         ResultSet resultSet = prepareStatement.executeQuery();
-        movies = MovieMapper.getMultipleMovies(resultSet);
+        List<Movie> movies = MovieMapper.getMultipleMovies(resultSet);
 
         resultSet.close();
         prepareStatement.close();
