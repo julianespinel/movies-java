@@ -14,6 +14,18 @@ To install the movies microservice just follow these 4 simple steps:
 4. sh start-develop.sh
 5. sh create-movies.sh
 
+## Testing
+
+### Unit tests
+
+1. `cd movies-java/scripts`
+1. `sh build.sh`
+
+### Checking code coverage
+
+1. `cd movies-java/target/sites/jacoco/`
+1. Open file `index.html`
+
 ## Usage
 
 To check if the the microservice is up and running go to `http://localhost:9001/movies/admin/ping`. 
