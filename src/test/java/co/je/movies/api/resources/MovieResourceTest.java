@@ -62,4 +62,23 @@ public class MovieResourceTest {
         int status = response.getStatus();
         assertEquals(422, status);
     }
+
+    @Test
+    public void testGetMovieByImdbId_OK() {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        createMovie(matrixMovie);
+
+        Optional<Movie> optionalMovie = Optional.of(matrixMovie);
+        Mockito.when(movieBusinessMock.getMovieByImdbId(matrixMovie.getImdbId())).thenReturn(optionalMovie);
+
+        String getUri = "/movies/" + matrixMovie.getImdbId();
+        Response getResponse = resources.client().target(getUri).request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).get();
+
+        assertNotNull(getResponse);
+        assertEquals(200, getResponse.getStatus());
+
+        Movie movie = getResponse.readEntity(Movie.class);
+        assertEquals(0, matrixMovie.compareTo(movie));
+    }
 }
