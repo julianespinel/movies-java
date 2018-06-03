@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -22,6 +23,10 @@ import co.je.movies.util.factories.MovieFactoryForTests;
 import co.je.movies.util.factories.ObjectMapperFactoryForTests;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class MovieResourceTest {
@@ -80,5 +85,39 @@ public class MovieResourceTest {
 
         Movie movie = getResponse.readEntity(Movie.class);
         assertEquals(0, matrixMovie.compareTo(movie));
+    }
+
+    @Test
+    public void testGetMoviesByParams_OK() {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        createMovie(matrixMovie);
+        Movie matrixReloadedMovie = MovieFactoryForTests.getMatrixReloadedMovie();
+        createMovie(matrixReloadedMovie);
+
+        String title = "matrix";
+        int runtimeInMinutes = 100;
+        int metascore = 6;
+        BigDecimal imdbRating = new BigDecimal("7.0");
+        long imdbVotes = 10000;
+        List<Movie> expectedMovies = Arrays.asList(matrixMovie, matrixReloadedMovie);
+        Mockito.when(
+                movieBusinessMock.getMoviesByParams(title, runtimeInMinutes, metascore, imdbRating, imdbVotes)
+        ).thenReturn(expectedMovies);
+
+        String getUri = "/movies";
+        Response getResponse = resources.client().target(getUri)
+                .queryParam("title", title)
+                .queryParam("runtimeInMinutes", runtimeInMinutes)
+                .queryParam("metascore", metascore)
+                .queryParam("imdbRating", imdbRating)
+                .queryParam("imdbVotes", imdbVotes)
+                .request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).get();
+
+        assertNotNull(getResponse);
+        assertEquals(200, getResponse.getStatus());
+
+        Movie[] movies = getResponse.readEntity(Movie[].class);
+        assertEquals(2, movies.length);
     }
 }
