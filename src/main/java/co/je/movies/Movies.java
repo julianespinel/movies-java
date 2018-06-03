@@ -35,12 +35,10 @@ public class Movies extends Application<MoviesConfig> {
 
     @Override
     public void initialize(Bootstrap<MoviesConfig> bootstrap) {
-
 //        bootstrap.addBundle(new Java8Bundle());
     }
 
     private void addCORSSupport(Environment environment) {
-
         Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS,PATCH");
@@ -51,7 +49,6 @@ public class Movies extends Application<MoviesConfig> {
     }
 
     private ObjectMapper configureJackson(Environment environment) {
-
         ObjectMapper objectMapper = environment.getObjectMapper();
         objectMapper.registerModule(new ParameterNamesModule());
         objectMapper.registerModule(new JSR310Module());
@@ -68,36 +65,29 @@ public class Movies extends Application<MoviesConfig> {
     }
 
     private BasicDataSource getInitializedDataSource(SQLConfig sqlConfig) {
-
         BasicDataSource basicDataSource = new BasicDataSource();
-
         basicDataSource.setDriverClassName(sqlConfig.getDriverClass());
         basicDataSource.setUrl(sqlConfig.getUrl());
         basicDataSource.setUsername(sqlConfig.getUsername());
         basicDataSource.setPassword(sqlConfig.getPassword());
-
         return basicDataSource;
     }
 
     private void createTablesIfNeeded(BasicDataSource dataSource) throws SQLException {
-
         Connection dbConnection = dataSource.getConnection();
         MovieDAO movieDAO = new MovieDAO();
         movieDAO.createTableIfNotExists(dbConnection);
     }
 
     private MovieResource getMovieResource(BasicDataSource dataSource) {
-
         MovieDAO movieDAO = new MovieDAO();
         MovieBusiness movieBusiness = new MovieBusiness(dataSource, movieDAO);
         MovieResource movieResource = new MovieResource(movieBusiness);
-
         return movieResource;
     }
 
     @Override
     public void run(MoviesConfig moviesConfig, Environment environment) throws Exception {
-
         // add CORS support.
         addCORSSupport(environment);
 

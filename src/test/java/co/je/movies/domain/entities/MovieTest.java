@@ -20,15 +20,12 @@ public class MovieTest {
     
     @BeforeClass
     public static void setUpClass() {
-        
         objectMapper = ObjectMapperFactoryForTests.getConfiguredObjectMapper();
     }
     
     @Test
     public void serializesToJSON() {
-        
         try {
-            
             Movie movieFromJSON = objectMapper.readValue(FixtureHelpers.fixture("fixtures/movie.json"), Movie.class);
             String jsonMovieFromFile = objectMapper.writeValueAsString(movieFromJSON);
             
@@ -36,9 +33,7 @@ public class MovieTest {
             String jsonMatrixMovie = objectMapper.writeValueAsString(matrixMovie);
             
             assertEquals(jsonMovieFromFile, jsonMatrixMovie);
-            
         } catch (IOException e) {
-            
             e.printStackTrace();
             fail("Unexpected exception");
         }
@@ -46,15 +41,11 @@ public class MovieTest {
     
     @Test
     public void deserializesFromJSON() {
-        
         try {
-            
             Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
             Movie movieFromJSON = objectMapper.readValue(FixtureHelpers.fixture("fixtures/movie.json"), Movie.class);
             assertEquals(0, matrixMovie.compareTo(movieFromJSON));
-            
         } catch (IOException e) {
-            
             e.printStackTrace();
             fail("Unexpected exception");
         }
