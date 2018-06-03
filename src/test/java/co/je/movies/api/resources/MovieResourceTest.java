@@ -2,6 +2,9 @@ package co.je.movies.api.resources;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
@@ -18,6 +21,9 @@ import co.je.movies.domain.entities.Movie;
 import co.je.movies.util.factories.MovieFactoryForTests;
 import co.je.movies.util.factories.ObjectMapperFactoryForTests;
 
+import java.io.IOException;
+import java.util.Optional;
+
 public class MovieResourceTest {
 
     private static final MovieBusiness movieBusinessMock = Mockito.mock(MovieBusiness.class);
@@ -28,23 +34,24 @@ public class MovieResourceTest {
             .addProvider(ConstraintViolationExceptionMapper.class)
             .setMapper(ObjectMapperFactoryForTests.getConfiguredObjectMapper()).build();
 
+    private void createMovie(Movie movie) {
+        String createUri = "/movies";
+        Mockito.when(movieBusinessMock.createMovie(movie)).thenReturn(movie.getImdbId());
+        Response createResponse = resources.client().target(createUri).request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).post(Entity.entity(movie, MediaType.APPLICATION_JSON));
+
+        assertNotNull(createResponse);
+        assertEquals(201, createResponse.getStatus());
+    }
+
     @Test
     public void testCreateMovie_OK() {
-
-        String uri = "/movies";
         Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
-        Response response = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON).post(Entity.entity(matrixMovie, MediaType.APPLICATION_JSON));
-
-        assertNotNull(response);
-
-        int status = response.getStatus();
-        assertEquals(201, status);
+        createMovie(matrixMovie);
     }
 
     @Test
     public void testCreateMovie_NOK_incompleteMovie() {
-
         String uri = "/movies";
         Movie matrixMovie = MovieFactoryForTests.getNotValidMovie();
         Response response = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
