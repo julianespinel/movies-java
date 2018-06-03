@@ -9,7 +9,7 @@ This is a Java implementation of the [movies exercise](https://github.com/julian
 To install the movies microservice just follow these 4 simple steps: 
 
 1. git clone git@github.com:julianespinel/movies.git
-2. cd movies/scripts
+2. cd movies-java/scripts
 3. sh build.sh
 4. sh start-develop.sh
 5. sh create-movies.sh
@@ -39,9 +39,22 @@ With the movies microservice you are able to execute the following acitons:
 4. Update a movie
 5. Delete a movie
 
-## API
+Each API call is specified below:
 
-### 1. Create a movie
+### 1. Check microservice is alive
+
+*Request*
+
+Method: `GET`<br>
+URL: `http://localhost:9001/movies/admin/ping`<br>
+
+*Response*
+
+```
+pong
+```
+
+### 2. Create a movie
 
 *Request*
 
@@ -73,7 +86,7 @@ Body:
 }
 ```
 
-### 2. Find a specific movie
+### 3. Find a specific movie
 
 *Request*
 
@@ -98,7 +111,7 @@ URL: `http://localhost:9001/movies/api/movies/tt0133093`<br>
 }
 ```
 
-### 3. Find a set of movies
+### 4. Find a set of movies
 
 *Request*
 
@@ -125,7 +138,7 @@ URL: `http://localhost:9001/movies/api/movies?title=Matrix&runtimeInMinutes=130&
 ]
 ```
 
-### 4. Update a movie
+### 5. Update a movie
 
 *Request*
 
@@ -168,7 +181,7 @@ We changed the title, director, plot and the metascore.
 }
 ```
 
-### 5. Delete a movie
+### 6. Delete a movie
 
 *Request*
 
