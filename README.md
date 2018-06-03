@@ -1,6 +1,6 @@
-# movies [![Build Status](https://travis-ci.org/julianespinel/movies.svg?branch=master)](https://travis-ci.org/julianespinel/movies)
+# movies-java [![Build Status](https://travis-ci.org/julianespinel/movies-java.svg?branch=master)](https://travis-ci.org/julianespinel/movies-java)
 
-Movies is a basic microservice built using Dropwizard. It was created with educational purposes, to be used as a resource for this meetup: [How to build, test and deploy a microservice?](http://www.meetup.com/Bogota-JVM-Meetup/events/222159221)
+This is a Java implementation of the [movies exercise](https://github.com/julianespinel/movies). It was created with educational purposes, to be used as a resource for this meetup: [How to build, test and deploy a microservice?](http://www.meetup.com/Bogota-JVM-Meetup/events/222159221)
 
 ## Installation
 
