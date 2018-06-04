@@ -127,6 +127,33 @@ public class MovieBusinessTest {
         assertEquals(2, movies.size());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testGetMoviesByParams_NOK_ThrowsIllegalStateException() throws SQLException {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        Movie matrixReloadedMovie = MovieFactoryForTests.getMatrixReloadedMovie();
+        List<Movie> expectedMovies = Arrays.asList(matrixMovie, matrixReloadedMovie);
+
+        BigDecimal imdbRating = new BigDecimal("7.0");
+        Mockito.doThrow(SQLException.class).when(
+                movieDAOMock
+        ).getMoviesByParams(
+                dbConnectionMock,
+                "matrix",
+                100,
+                6,
+                imdbRating,
+                10000
+        );
+
+        movieBusiness.getMoviesByParams(
+                "matrix",
+                100,
+                6,
+                imdbRating,
+                10000
+        );
+    }
+
     @Test
     public void testUpdateMovie_OK() throws SQLException {
         Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
