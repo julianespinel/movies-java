@@ -141,4 +141,25 @@ public class MovieResourceTest {
         // The only attribute that doesn't match is the imdbID.
         assertEquals(1, matrixReloaded.compareTo(movie));
     }
+
+    @Test
+    public void testDeleteMovie_OK() {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        createMovie(matrixMovie);
+
+        String matrixImdbId = matrixMovie.getImdbId();
+        boolean movieWasDeleted = true;
+        Mockito.when(movieBusinessMock.deleteMovie(matrixImdbId)).thenReturn(movieWasDeleted);
+
+        String uri = "/movies/" + matrixImdbId;
+        Response response = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).delete();
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatus());
+
+        Map<String, String> message = response.readEntity(Map.class);
+        assertNotNull(message);
+        assertEquals(message.get("The movie was deleted?"), movieWasDeleted);
+    }
 }
