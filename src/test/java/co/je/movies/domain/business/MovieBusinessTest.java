@@ -195,4 +195,12 @@ public class MovieBusinessTest {
         boolean result = movieBusiness.deleteMovie(imdbId);
         assertEquals(movieWasDeleted, result);
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testDeleteMovie_NOK_ThrowsIllegalStateException() throws SQLException {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        String imdbId = matrixMovie.getImdbId();
+        Mockito.doThrow(SQLException.class).when(movieDAOMock).deleteMovie(dbConnectionMock, imdbId);
+        movieBusiness.deleteMovie(imdbId);
+    }
 }
