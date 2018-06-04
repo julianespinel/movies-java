@@ -118,4 +118,30 @@ public class MovieResourceTest {
         Movie[] movies = getResponse.readEntity(Movie[].class);
         assertEquals(2, movies.length);
     }
+
+    @Test
+    public void testUpdateMovie_OK() {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        createMovie(matrixMovie);
+
+        String matrixImdbId = matrixMovie.getImdbId();
+        Movie matrixReloaded = MovieFactoryForTests.getMatrixReloadedMovie();
+        Movie updatedMovie = MovieFactoryForTests.getUpdatedMovie(matrixImdbId, matrixReloaded);
+        Optional<Movie> optionalMovie = Optional.of(updatedMovie);
+        Mockito.when(
+                movieBusinessMock.updateMovie(Mockito.anyString(), Mockito.any(Movie.class))
+        ).thenReturn(optionalMovie);
+
+        String uri = "/movies/" + matrixImdbId;
+        Response getResponse = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).put(Entity.entity(matrixReloaded, MediaType.APPLICATION_JSON));
+
+        assertNotNull(getResponse);
+        assertEquals(200, getResponse.getStatus());
+
+        Movie movie = getResponse.readEntity(Movie.class);
+        assertNotEquals(matrixImdbId, matrixReloaded.getImdbId());
+        // The only attribute that doesn't match is the imdbID.
+        assertEquals(1, matrixReloaded.compareTo(movie));
+    }
 }
