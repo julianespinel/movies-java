@@ -174,6 +174,15 @@ public class MovieBusinessTest {
         assertEquals(1, matrixReloadedMovie.compareTo(expectedMovie));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testUpdateMovie_NOK_ThrowsIllegalStateException() throws SQLException {
+        Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
+        Movie matrixReloadedMovie = MovieFactoryForTests.getMatrixReloadedMovie();
+        String imdbId = matrixMovie.getImdbId();
+        Mockito.doThrow(SQLException.class).when(movieDAOMock).updateMovie(dbConnectionMock, imdbId, matrixReloadedMovie);
+        movieBusiness.updateMovie(imdbId, matrixReloadedMovie);
+    }
+
     @Test
     public void testDeleteMovie_OK() throws SQLException {
         Movie matrixMovie = MovieFactoryForTests.getMatrixMovie();
