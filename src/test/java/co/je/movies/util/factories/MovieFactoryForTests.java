@@ -59,4 +59,20 @@ public class MovieFactoryForTests {
 
         return new Movie(imdbId, title, runtimeInMinutes, releaseDate, filmRating, genre, director, plot, metascore, imdbRating, imdbVotes);
     }
+
+    public static Movie getUpdatedMovie(String originalImdbId, Movie movieToUpdate) {
+        return new Movie(
+                originalImdbId,
+                movieToUpdate.getTitle(),
+                movieToUpdate.getRuntimeInMinutes(),
+                movieToUpdate.getReleaseDate(),
+                movieToUpdate.getFilmRating(),
+                movieToUpdate.getGenre(),
+                movieToUpdate.getDirector(),
+                movieToUpdate.getPlot(),
+                movieToUpdate.getMetascore(),
+                movieToUpdate.getImdbRating(),
+                movieToUpdate.getImdbVotes()
+        );
+    }
 }
