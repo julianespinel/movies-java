@@ -1,9 +1,5 @@
 package co.je.movies.api.resources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -28,6 +24,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 public class MovieResourceTest {
 
@@ -76,8 +74,8 @@ public class MovieResourceTest {
         Optional<Movie> optionalMovie = Optional.of(matrixMovie);
         Mockito.when(movieBusinessMock.getMovieByImdbId(matrixMovie.getImdbId())).thenReturn(optionalMovie);
 
-        String getUri = "/movies/" + matrixMovie.getImdbId();
-        Response getResponse = resources.client().target(getUri).request(MediaType.APPLICATION_JSON)
+        String uri = "/movies/" + matrixMovie.getImdbId();
+        Response getResponse = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).get();
 
         assertNotNull(getResponse);
@@ -104,8 +102,8 @@ public class MovieResourceTest {
                 movieBusinessMock.getMoviesByParams(title, runtimeInMinutes, metascore, imdbRating, imdbVotes)
         ).thenReturn(expectedMovies);
 
-        String getUri = "/movies";
-        Response getResponse = resources.client().target(getUri)
+        String uri = "/movies";
+        Response getResponse = resources.client().target(uri)
                 .queryParam("title", title)
                 .queryParam("runtimeInMinutes", runtimeInMinutes)
                 .queryParam("metascore", metascore)
