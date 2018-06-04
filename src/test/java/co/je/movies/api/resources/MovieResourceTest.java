@@ -20,10 +20,7 @@ import co.je.movies.util.factories.ObjectMapperFactoryForTests;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -75,13 +72,13 @@ public class MovieResourceTest {
         Mockito.when(movieBusinessMock.getMovieByImdbId(matrixMovie.getImdbId())).thenReturn(optionalMovie);
 
         String uri = "/movies/" + matrixMovie.getImdbId();
-        Response getResponse = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
+        Response response = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).get();
 
-        assertNotNull(getResponse);
-        assertEquals(200, getResponse.getStatus());
+        assertNotNull(response);
+        assertEquals(200, response.getStatus());
 
-        Movie movie = getResponse.readEntity(Movie.class);
+        Movie movie = response.readEntity(Movie.class);
         assertEquals(0, matrixMovie.compareTo(movie));
     }
 
@@ -103,7 +100,7 @@ public class MovieResourceTest {
         ).thenReturn(expectedMovies);
 
         String uri = "/movies";
-        Response getResponse = resources.client().target(uri)
+        Response response = resources.client().target(uri)
                 .queryParam("title", title)
                 .queryParam("runtimeInMinutes", runtimeInMinutes)
                 .queryParam("metascore", metascore)
@@ -112,10 +109,10 @@ public class MovieResourceTest {
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).get();
 
-        assertNotNull(getResponse);
-        assertEquals(200, getResponse.getStatus());
+        assertNotNull(response);
+        assertEquals(200, response.getStatus());
 
-        Movie[] movies = getResponse.readEntity(Movie[].class);
+        Movie[] movies = response.readEntity(Movie[].class);
         assertEquals(2, movies.length);
     }
 
@@ -133,13 +130,13 @@ public class MovieResourceTest {
         ).thenReturn(optionalMovie);
 
         String uri = "/movies/" + matrixImdbId;
-        Response getResponse = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
+        Response response = resources.client().target(uri).request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).put(Entity.entity(matrixReloaded, MediaType.APPLICATION_JSON));
 
-        assertNotNull(getResponse);
-        assertEquals(200, getResponse.getStatus());
+        assertNotNull(response);
+        assertEquals(200, response.getStatus());
 
-        Movie movie = getResponse.readEntity(Movie.class);
+        Movie movie = response.readEntity(Movie.class);
         assertNotEquals(matrixImdbId, matrixReloaded.getImdbId());
         // The only attribute that doesn't match is the imdbID.
         assertEquals(1, matrixReloaded.compareTo(movie));
