@@ -40,11 +40,9 @@ public class MovieResource {
     @POST
     @Timed
     public Response createMovie(@Valid Movie movie) {
-        
         String imdbId = movieBusiness.createMovie(movie);
         Map<String, String> stringMessage = new HashMap<String, String>();
         stringMessage.put("imdbId", imdbId);
-        
         return Response.status(Status.CREATED).entity(stringMessage).build();
     }
     
@@ -52,18 +50,15 @@ public class MovieResource {
     @Timed
     @Path("/{imdbId}")
     public Response getMovieByImdbId(@PathParam("imdbId") String imdbId) {
-        
         Optional<Movie> optionalMovie = movieBusiness.getMovieByImdbId(imdbId);
         Status statusCode = optionalMovie.isPresent() ? Status.OK : Status.NOT_FOUND;
-        
         return Response.status(statusCode).entity(optionalMovie).build();
     }
     
     @GET
     @Timed
     public Response getMoviesByParams(@QueryParam("title") String title, @QueryParam("runtimeInMinutes") int runtimeInMinutes,
-            @QueryParam("metascore") int metascore, @QueryParam("imdbRating") BigDecimal imdbRating, @QueryParam("imdbVotes") long imdbVotes ) {
-        
+            @QueryParam("metascore") int metascore, @QueryParam("imdbRating") BigDecimal imdbRating, @QueryParam("imdbVotes") long imdbVotes) {
         List<Movie> movies = movieBusiness.getMoviesByParams(title, runtimeInMinutes, metascore, imdbRating, imdbVotes);
         return Response.status(Status.OK).entity(movies).build();
     }
@@ -72,10 +67,8 @@ public class MovieResource {
     @Timed
     @Path("/{imdbId}")
     public Response updateMovie(@PathParam("imdbId") String imdbId, @Valid Movie movieToUpdate) {
-        
         Optional<Movie> optionalUpdatedMovie = movieBusiness.updateMovie(imdbId, movieToUpdate);
         Status statusCode = optionalUpdatedMovie.isPresent() ? Status.OK : Status.NOT_FOUND;
-        
         return Response.status(statusCode).entity(optionalUpdatedMovie).build();
     }
     
@@ -83,13 +76,10 @@ public class MovieResource {
     @Timed
     @Path("/{imdbId}")
     public Response deleteMovie(@PathParam("imdbId") String imdbId) {
-        
         boolean movieWasDeleted = movieBusiness.deleteMovie(imdbId);
-        
         Status statusCode = movieWasDeleted ? Status.OK : Status.NOT_FOUND;
         Map<String, Boolean> booleanMessage = new HashMap<String, Boolean>();
         booleanMessage.put("The movie was deleted?", movieWasDeleted);
-        
         return Response.status(statusCode).entity(booleanMessage).build();
     }
 }
